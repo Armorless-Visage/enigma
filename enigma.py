@@ -14,7 +14,7 @@ class SubstitutionComponent(object):
         Return the outputLetter corresponding to the inputLetter
         '''
         assert letterInput in string.ascii_letters, 'input must be a letter'
-        return self.wiring[letterInput.upper())]
+        return self.wiring[letterInput.upper()]
 
 class Rotor(SubstitutionComponent):
     I = {'A':'E', 'B':'K', 'C':'M', 'D':'F', 'E':'L', 'F':'G', 'G':'D', 'H':'Q', 'I':'V', 'J':'Z', 'K':'N', 'L':'T', 'M':'O', 'N':'W', 'O':'Y', 'P':'H', 'Q':'X', 'R':'U', 'S':'S', 'T':'P', 'U':'A', 'V':'I', 'W':'B', 'X':'R', 'Y':'C', 'Z':'J'}
@@ -69,6 +69,11 @@ class Rotor(SubstitutionComponent):
         '''
         assert position in string.ascii_letters, 'position must be a letter'
         self.position = position.upper()
+    def getRotorPosition(self):
+        '''
+        Returns the rotor position, a letter
+        '''
+        return self.position
 
     def rotate(self):
         '''
@@ -97,26 +102,56 @@ class Plugboard(SubstitutionComponent):
 
 class StaticRotor(SubstitutionComponent):
     STATIC_WIRING = {'A':'A', 'B':'B', 'C':'C', 'D':'D', 'E':'E', 'F':'F', 'G':'G', 'H':'H', 'I':'I', 'J':'J', 'K':'K', 'L':'L', 'M':'M', 'N':'N', 'O':'O', 'P':'P', 'Q':'Q', 'R':'R', 'S':'S', 'T':'T', 'U':'U', 'V':'V', 'W':'W', 'X':'X', 'Y':'Y', 'Z':'Z'}
-    def __init__(self, wiring=STATIC_WIRING)
+    def __init__(self, wiring=STATIC_WIRING):
         SubstitutionComponent.__init__(self, wiring)
         
 
 class Enigma(object):
     def __init__(self, plugboard_wiring, rotorL, rotorM, rotorR, reflector):
-        assert isinstance(rotor_a, Rotor), 'rotor_a must be a Rotor object'
-        assert isinstance(rotor_b, Rotor), 'rotor_b must be a Rotor object'
-        assert isinstance(rotor_c, Rotor), 'rotor_c must be a Rotor object'
-        assert isinstance(rotor_c, Reflector), 'reflector must be a reflector object'
+        assert isinstance(rotorL, Rotor), 'rotorL must be a Rotor object'
+        assert isinstance(rotorM, Rotor), 'rotorM must be a Rotor object'
+        assert isinstance(rotorR, Rotor), 'rotorR must be a Rotor object'
+        assert isinstance(reflector, Reflector), 'reflector must be a reflector object'
+        self.reflector = Reflector(reflector)
         self.rotorL = rotorL
         self.rotorM = rotorM
         self.rotorR = rotorR
+        self.static = StaticRotor()
 
     def stepRotors(self):
         '''
         Step the right rotor by one, advance any remaining rotors that hit a notch
         '''
-        
-        
+        # set a flag on the rotors that are on the notch letter
+        rotorA_notch = False
+        if self.rotorR.position == rotorR.notch:
+            rotorR_notch = True
+        rotorM_notch = False
+        if self.rotorM.position == RotorM.notch:
+            rotorM_notch = True
+
+        rotorR.rotate() # always step the right rotor
+        if self.rotorR_notch: # if the right rotor is on the notch rotate the middle rotor
+            self.rotorM.rotate()
+            if rotorM_notch: # if the middle rotor is also on the notch, rotate the left most rotor
+               self.rotorL.rotate()
 
     def keyboardInput(self, key):
-        '''        
+        '''
+        Enter a plaintext character and return an ciphertext character
+        '''
+        self.stepRotors() # step the rotor before input
+        # little board mapping transposition between rotors
+        s = self.static.getLetterOutput(key)
+        r = self.rotorR.getLetterOutput(s)
+        m = self.rotorM.getLetterOutput(r)
+        l = self.rotorL.getLetterOutput(m)
+        e = self.rotorL.getLetterOutput(l)
+        l2 = self.rotorL.getLetterOutput(e)
+        m2 = self.rotorM.getLetterOutput(l2)
+        r2 = self.rotorR.getLetterOutput(m2)
+        s2 = self.static.getLetterOutput(r2)
+        
+       
+        
+
