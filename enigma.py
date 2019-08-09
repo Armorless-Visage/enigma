@@ -33,9 +33,9 @@ class Rotor(SubstitutionComponent):
         Enigma rotor object:
         Takes the rotor number 1-8, the ring setting and the starting postition.
         '''
-        assert number in ROTOR_TYPE.keys(), str('rotor number must be one of ' + (str(ROTOR_TYPE.keys())))
+        assert number in self.ROTOR_TYPE.keys(), str('rotor number must be one of ' + (str(self.ROTOR_TYPE.keys())))
         self.rotorNumber = number
-        self.rotorWiring = self.ROTOR_TYPE[number].copy()
+        self.wiring = self.ROTOR_TYPE[number].copy()
         self.notch = self.ROTOR_NOTCH[number]
         assert ringSetting in string.ascii_letters, 'ringSetting must be a letter'
         self.ringSetting = ringSetting.upper()
@@ -52,17 +52,15 @@ class Rotor(SubstitutionComponent):
         '''
         # Set the new rotor wiring based on ringSetting
         assert ringSetting in string.ascii_letters
-        wiring = self.rotorWiring.copy()
+        wiring = self.wiring.copy()
         vals = list(wiring.values())
         alphabet = string.ascii_uppercase
         index = alphabet.index(ringSetting)
         newWiring = vals[index:] + vals[:index] # shift the output letters
         for i in range(len(wiring)):
             wiring[i] = newWiring[i]
-        self.rotorWiring = newWiring # set the new wiring
+        self.wiring = wiring # set the new wiring
         
-        return self.rotorWiring(letterInput.upper())
-
     def setRotorPosition(self, position):
         '''
         Set the rotor position
@@ -82,7 +80,10 @@ class Rotor(SubstitutionComponent):
         alphabet_index = string.ascii_uppercase.index(self.position)
         if alphabet_index >= (len(string.ascii_uppercase) -1):
             alphabet_index = alphabet_index % (len(string.ascii_uppercase) -1)
+        alphabet_index += 1
         self.position = string.ascii_uppercase[alphabet_index]
+    def getWiring(self):
+        return self.wiring
 
 
 class Reflector(SubstitutionComponent):
@@ -90,14 +91,15 @@ class Reflector(SubstitutionComponent):
     REFLECTOR_B = {'A':'F', 'B':'V', 'C':'P', 'D':'J', 'E':'I', 'F':'A', 'G':'O', 'H':'Y', 'I':'E', 'J':'D', 'K':'R', 'L':'Z', 'M':'X', 'N':'W', 'O':'G', 'P':'C', 'Q':'T', 'R':'K', 'S':'U', 'T':'Q', 'U':'S', 'V':'B', 'W':'N', 'X':'M', 'Y':'H', 'Z':'L'}
     REFLECTOR_TYPE = {'REFLECTOR_A':REFLECTOR_A, 'REFLECTOR_B':REFLECTOR_B}
     def __init__(self, reflector):
-        assert reflector in REFLECTOR_TYPE.keys(), str('reflector must be one of ' + str(REFLECTOR_TYPE.keys()))
+        assert reflector in self.REFLECTOR_TYPE.keys(), str('reflector must be one of ' + str(self.REFLECTOR_TYPE.keys()))
         self.reflector = reflector
-        SubstitutionComponent.__init__(self, REFLECTOR_TYPE[self.reflector])
+        SubstitutionComponent.__init__(self, self.REFLECTOR_TYPE[self.reflector])
     def __str__(self):
         return self.reflector
 
 class Plugboard(SubstitutionComponent):
-    def __init__(self, wiring):
+    STATIC_WIRING = {'A':'A', 'B':'B', 'C':'C', 'D':'D', 'E':'E', 'F':'F', 'G':'G', 'H':'H', 'I':'I', 'J':'J', 'K':'K', 'L':'L', 'M':'M', 'N':'N', 'O':'O', 'P':'P', 'Q':'Q', 'R':'R', 'S':'S', 'T':'T', 'U':'U', 'V':'V', 'W':'W', 'X':'X', 'Y':'Y', 'Z':'Z'}
+    def __init__(self, wiring=STATIC_WIRING):
         SubstitutionComponent.__init__(self, wiring)
 
 class StaticRotor(SubstitutionComponent):
@@ -112,7 +114,7 @@ class Enigma(object):
         assert isinstance(rotorM, Rotor), 'rotorM must be a Rotor object'
         assert isinstance(rotorR, Rotor), 'rotorR must be a Rotor object'
         assert isinstance(reflector, Reflector), 'reflector must be a reflector object'
-        self.reflector = Reflector(reflector)
+        self.reflector = reflector
         self.rotorL = rotorL
         self.rotorM = rotorM
         self.rotorR = rotorR
@@ -123,18 +125,28 @@ class Enigma(object):
         Step the right rotor by one, advance any remaining rotors that hit a notch
         '''
         # set a flag on the rotors that are on the notch letter
-        rotorA_notch = False
-        if self.rotorR.position == rotorR.notch:
+        rotorR_notch = False
+        if self.rotorR.position == self.rotorR.notch:
             rotorR_notch = True
         rotorM_notch = False
-        if self.rotorM.position == RotorM.notch:
+        if self.rotorM.position == self.rotorM.notch:
             rotorM_notch = True
 
-        rotorR.rotate() # always step the right rotor
-        if self.rotorR_notch: # if the right rotor is on the notch rotate the middle rotor
+        self.rotorR.rotate() # always step the right rotor
+        if rotorR_notch: # if the right rotor is on the notch rotate the middle rotor
             self.rotorM.rotate()
             if rotorM_notch: # if the middle rotor is also on the notch, rotate the left most rotor
                self.rotorL.rotate()
+
+    def _rotorInterconnect(self, rotorIN, rotorOUT):
+        i = rotorIN.getWiring().copy()
+        o = rotorOUT.getWiring().copy()
+        i_p = rotorIN.getRotorPosition()
+        o_p = rotorOUT.getRotorPosition()
+        for n in range(len(i.values())):
+        # TODO FINISH    
+            
+                
 
     def keyboardInput(self, key):
         '''
@@ -151,6 +163,7 @@ class Enigma(object):
         m2 = self.rotorM.getLetterOutput(l2)
         r2 = self.rotorR.getLetterOutput(m2)
         s2 = self.static.getLetterOutput(r2)
+        return s2
         
        
         
