@@ -106,6 +106,7 @@ class Rotor(SubstitutionComponent):
     def produceReverseOutput(self, letterInput):
         '''
         Returns the reverse path wiring output from the reflector
+        letterInput should be BEFORE calulating the ringsetting
         '''
         assert letterInput in string.ascii_letters, 'input must be a letter'
         
@@ -114,10 +115,18 @@ class Rotor(SubstitutionComponent):
         reverseWiring = {}
         for k in rawWiring:
             reverseWiring[rawWiring[k]] = k
-        
-        
 
+        # shift ringsetting before because it operates on left side of rotor
+        ringsettingShift = string.ascii_uppercase.index(self.getRingSetting())
+        letterIndex = string.ascii_uppercase.index(letterInput) + ringsettingShift
+        if letterIndex > len(string.ascii_uppercase) -1: # wrap if shift goes over z-a
+            letterIndex = letterIndex % (len(string.ascii_uppercase) - 1)
+        shiftedInput = string.ascii_uppercase[letterIndex]
 
+        output = reverseWiring[shiftedInput]
+        outIndex = string.ascii_uppercase.index(output)
+        return string.ascii_uppercase[outIndex]
+        
 class Reflector(SubstitutionComponent):
     REFLECTOR_A = {'A':'Y', 'B':'R', 'C':'U', 'D':'H', 'E':'Q', 'F':'S', 'G':'L', 'H':'D', 'I':'P', 'J':'X', 'K':'N', 'L':'G', 'M':'O', 'N':'K', 'O':'M', 'P':'I', 'Q':'E', 'R':'B', 'S':'F', 'T':'Z', 'U':'C', 'V':'W', 'W':'V', 'X':'J', 'Y':'A', 'Z':'T'}
     REFLECTOR_B = {'A':'F', 'B':'V', 'C':'P', 'D':'J', 'E':'I', 'F':'A', 'G':'O', 'H':'Y', 'I':'E', 'J':'D', 'K':'R', 'L':'Z', 'M':'X', 'N':'W', 'O':'G', 'P':'C', 'Q':'T', 'R':'K', 'S':'U', 'T':'Q', 'U':'S', 'V':'B', 'W':'N', 'X':'M', 'Y':'H', 'Z':'L'}
