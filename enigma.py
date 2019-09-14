@@ -14,7 +14,7 @@ class SubstitutionComponent(object):
     def __str__(self):
         return str(self.wiring)
 
-    def getLetterOutput(self, letterInput):
+    def produceLetterOutput(self, letterInput):
         '''
         Return the outputLetter corresponding to the inputLetter
         '''
@@ -42,7 +42,9 @@ class Rotor(SubstitutionComponent):
     def __init__(self, number, ringSetting, position):
         '''
         Enigma rotor object:
-        Takes the rotor number 1-8, the ring setting and the starting postition.
+        Takes the rotor number: 1-8 (1-3 currently)
+        Ring setting: A-Z 
+        Starting postition: A-Z
         '''
         assert number in self.ROTOR_TYPE.keys(), str('rotor number must be one of ' + (str(self.ROTOR_TYPE.keys())))
         self.rotorNumber = number
@@ -123,9 +125,7 @@ class Rotor(SubstitutionComponent):
             letterIndex = letterIndex % (len(string.ascii_uppercase) - 1)
         shiftedInput = string.ascii_uppercase[letterIndex]
 
-        output = reverseWiring[shiftedInput]
-        outIndex = string.ascii_uppercase.index(output)
-        return string.ascii_uppercase[outIndex]
+        return reverseWiring[shiftedInput]
         
 class Reflector(SubstitutionComponent):
     REFLECTOR_A = {'A':'Y', 'B':'R', 'C':'U', 'D':'H', 'E':'Q', 'F':'S', 'G':'L', 'H':'D', 'I':'P', 'J':'X', 'K':'N', 'L':'G', 'M':'O', 'N':'K', 'O':'M', 'P':'I', 'Q':'E', 'R':'B', 'S':'F', 'T':'Z', 'U':'C', 'V':'W', 'W':'V', 'X':'J', 'Y':'A', 'Z':'T'}
@@ -148,7 +148,6 @@ class StaticRotor(SubstitutionComponent):
     def __init__(self, wiring=STATIC_WIRING):
         SubstitutionComponent.__init__(self, wiring)
         
-
 class Enigma(object):
     def __init__(self, plugboard_wiring, rotorL, rotorM, rotorR, reflector):
         assert isinstance(rotorL, Rotor), 'rotorL must be a Rotor object'
@@ -164,7 +163,7 @@ class Enigma(object):
     def keyPress(self, keyInput):
         self.stepRotors()
         # static rotor output position
-        self.static.getLetterOutput(keyInput)
+        self.static.produceLetterOutput(keyInput)
 
     def stepRotors(self):
         '''
@@ -184,24 +183,27 @@ class Enigma(object):
             if rotorM_notch: # if the middle rotor is also on the notch, rotate the left most rotor
                self.rotorL.rotate()
 
-    def getCipherText(self, inputChar):
+    def letterToPosition(self, rotor, letter):
         '''
-        input: A-Za-z str
-        output: A-Z str
+        finds the position of a letter inside the enigma machine
+        rotor: must be one of the 3 self rotors objects
+        letter: the letter that you are trying to find the position of
+        side: 0 or 1, 0 is the left side of the rotor 1 is the right
         '''
+        assert isinstance(rotor, Rotor)
+        assert lettter in string.ascii_uppercase, 'must be an uppercase letter'
+        rotor_s = string.ascii_uppercase.index(rotor.getRotorPosition())
+        letter_s = string.ascii_uppercase.index(letter)
+        shift = letter_s - rotor_s 
+        if shift < 0:
+            shift = shift % len(string.ascii_uppercase)
 
-    def getWiringMap(self):
-        '''
-        generates a dict of each output for a given input in A-Z range
-        '''
-        rotorR_step = string.ascii_uppercase.index(self.rotorR.getRotorPosition())
-        rotorM_step = string.ascii_uppercase.index(self.rotorM.getRotorPosition())
-        rotorL_step = string.ascii_uppercase.index(self.rotorL.getRotorPosition())
-        static_wiring = self.static.getWiring()
-        right_wiring = self.rotorR.getWiring()
-        middle_wiring = self.rotorM.getWiring()
-        left_wiring = self.rotorL.getWiring()
-        reflector_wiring = self.reflector.getWiring()
+        return shift
+    
+    def positionToLetter(self, rotor, position):
+        assert isinstance(rotor, Rotor)
+        assert position <= (len(string.ascii_uppercase) - 1)
+        rotor_i = string.ascii_uppercase.index(rotor.getRotorPosition())
         
 
     def keyboardInput(self, key):
@@ -210,15 +212,17 @@ class Enigma(object):
         '''
         self.stepRotors() # step the rotor before input
         # little board mapping transposition between rotors
-        s = self.static.getLetterOutput(key)
-        r = self.rotorR.getLetterOutput(s)
-        m = self.rotorM.getLetterOutput(r)
-        l = self.rotorL.getLetterOutput(m)
-        e = self.rotorL.getLetterOutput(l)
-        l2 = self.rotorL.getLetterOutput(e)
-        m2 = self.rotorM.getLetterOutput(l2)
-        r2 = self.rotorR.getLetterOutput(m2)
-        s2 = self.static.getLetterOutput(r2)
+        s = self.static.produceLetterOutput(key)
+        s_i = self.letterToPosition(self.static, s)
+
+        r = self.rotorR.produceLetterOutput(r_i)
+        m = self.rotorM.produceLetterOutput(m_i)
+        l = self.rotorL.produceLetterOutput(l_i)
+        e = self.rotorL.produceLetterOutput(e_i)
+        l2 = self.rotorL.produceLetterOutput(e)
+        m2 = self.rotorM.produceLetterOutput(l2)
+        r2 = self.rotorR.produceLetterOutput(m2)
+        s2 = self.static.produceLetterOutput(r2)
         return s2
         
        
