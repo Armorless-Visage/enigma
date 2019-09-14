@@ -103,6 +103,20 @@ class Rotor(SubstitutionComponent):
             outIndex = outIndex % (len(string.ascii_uppercase) - 1)
         return string.ascii_uppercase[outIndex]
 
+    def produceReverseOutput(self, letterInput):
+        '''
+        Returns the reverse path wiring output from the reflector
+        '''
+        assert letterInput in string.ascii_letters, 'input must be a letter'
+        
+        # reverse mapping of keys -> values to values -> keys
+        rawWiring = self.getWiring()
+        reverseWiring = {}
+        for k in rawWiring:
+            reverseWiring[rawWiring[k]] = k
+        
+        
+
 
 class Reflector(SubstitutionComponent):
     REFLECTOR_A = {'A':'Y', 'B':'R', 'C':'U', 'D':'H', 'E':'Q', 'F':'S', 'G':'L', 'H':'D', 'I':'P', 'J':'X', 'K':'N', 'L':'G', 'M':'O', 'N':'K', 'O':'M', 'P':'I', 'Q':'E', 'R':'B', 'S':'F', 'T':'Z', 'U':'C', 'V':'W', 'W':'V', 'X':'J', 'Y':'A', 'Z':'T'}
