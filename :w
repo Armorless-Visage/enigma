@@ -53,6 +53,7 @@ class Rotor(SubstitutionComponent):
         assert ringSetting in string.ascii_letters, 'ringSetting must be a letter'
         self.ringSetting = ringSetting.upper()
         self.ringSettingShift = string.ascii_uppercase.index(self.ringSetting)
+        self.setRingSetting(self.ringSetting)
 
         assert position in string.ascii_letters, 'position must be a letter'
         self.position = position.upper()
@@ -60,13 +61,28 @@ class Rotor(SubstitutionComponent):
     def __str__(self):
         return str(self.position) + str(self.rotorNumber)
 
+    def setRingSetting(self, ringSetting):
+        '''
+        Setter to change the wiring according to the ringstellung (ring setting) on the rotor
+        # FIXME: setting ringsetting multiple times causes bad things
+        '''
+        # Set the new rotor wiring based on ringSetting
+        assert ringSetting in string.ascii_letters
+        wiring = self.wiring.copy()
+        vals = list(wiring.values())
+        alphabet = string.ascii_uppercase
+        index = alphabet.index(ringSetting)
+        newWiring = vals[index:] + vals[:index] # shift the output letters
+        for i in range(len(wiring)):
+            wiring[i] = newWiring[i]
+        self.wiring = wiring # set the new wiring
+        
     def setRotorPosition(self, position):
         '''
         Set the rotor position
         '''
         assert position in string.ascii_letters, 'position must be a letter'
         self.position = position.upper()
-
     def getRotorPosition(self):
         '''
         Returns the rotor position, a letter
@@ -82,26 +98,8 @@ class Rotor(SubstitutionComponent):
             alphabet_index = alphabet_index % (len(string.ascii_uppercase) -1)
         alphabet_index += 1
         self.position = string.ascii_uppercase[alphabet_index]
-    
-    def getRingSetting(self):
-        '''
-        Getter for ringsetting
-        '''
-        return self.ringSetting
-    
-    def produceLetterOutput(self, letterInput):
-        '''
-        Return the outputLetter corresponding to the inputLetter
-        '''
-        assert letterInput in string.ascii_letters, 'input must be a letter'
-        rawWiring = self.getWiring()
-        rawOutput = rawWiring[letterInput]
-        rawIndex = string.ascii_uppercase.index(rawOutput)
-        ringsettingShift = string.ascii_uppercase.index(self.getRingSetting())
-        outIndex = rawIndex + ringsettingShift
-        if outIndex > len(string.ascii_uppercase) -1: # wrap if shift goes over z-a
-            outIndex = outIndex % (len(string.ascii_uppercase) - 1)
-        return string.ascii_uppercase[outIndex]
+
+      
 
 
 class Reflector(SubstitutionComponent):
