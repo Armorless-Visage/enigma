@@ -2,16 +2,10 @@ import enigma
 
 machine = enigma.Enigma(
     enigma.Plugboard.STATIC_WIRING,
-    enigma.Rotor(1, 'C', 'A'),
+    enigma.Rotor(1, 'A', 'A'),
     enigma.Rotor(2, 'A', 'A'),
     enigma.Rotor(3, 'A', 'A'),
     enigma.Reflector('REFLECTOR_A'))
-
-#print(machine.keyboardInput('A'))
-#print(machine.keyboardInput('A'))
-#print(machine.keyboardInput('A'))
-#print(machine.keyboardInput('A'))
-#print(machine.keyboardInput('A')
 
 def test_RotorWiring(rotor_n, rings, pos, fwd_in, rev_in, fwd_out, rev_out):
     rotor = enigma.Rotor(rotor_n, rings, pos)
@@ -26,9 +20,18 @@ def test_RotorWiring(rotor_n, rings, pos, fwd_in, rev_in, fwd_out, rev_out):
 def test_letterToPosition(rotor, letter, good_out):
     t = machine.letterToPosition(rotor, letter) 
     if t == good_out:
-        print('Test for wiring orientation PASS')
+        print('Test for letterToPosition PASS')
     else:
-        print('Test for wiring orientation FAIL')
+        print('Test for letterToPosition FAIL')
+        print('## CORRECT OUTPUT\n' + str(good_out) + '\n## ACTUAL OUTPUT')
+        print(t)
+
+def test_positionToLetter(rotor, position, good_out):
+    t = machine.positionToLetter(rotor, position) 
+    if t == good_out:
+        print('Test for positionToLetter PASS')
+    else:
+        print('Test for positionToLetter FAIL')
         print('## CORRECT OUTPUT\n' + str(good_out) + '\n## ACTUAL OUTPUT')
         print(t)
 
@@ -48,3 +51,19 @@ test_letterToPosition(enigma.Rotor(1, 'A', 'Z'), 'A', 1)
 test_letterToPosition(enigma.Rotor(1, 'A', 'A'), 'C', 2)
 test_letterToPosition(enigma.Rotor(1, 'A', 'B'), 'C', 1)
 test_letterToPosition(enigma.Rotor(1, 'A', 'Z'), 'C', 3)
+
+test_positionToLetter(enigma.Rotor(1, 'A', 'A'), 0, 'A')
+test_positionToLetter(enigma.Rotor(1, 'A', 'B'), 0, 'B')
+test_positionToLetter(enigma.Rotor(1, 'A', 'Z'), 1, 'A')
+
+
+machine = enigma.Enigma(
+    enigma.Plugboard.STATIC_WIRING,
+    enigma.Rotor(1, 'A', 'A'),
+    enigma.Rotor(2, 'A', 'A'),
+    enigma.Rotor(3, 'A', 'A'),
+    enigma.Reflector('REFLECTOR_B'))
+
+print(machine.keyboardInput('A'))
+print(machine.keyboardInput('A'))
+print(machine.keyboardInput('A'))

@@ -190,8 +190,7 @@ class Enigma(object):
         letter: the letter that you are trying to find the position of
         side: 0 or 1, 0 is the left side of the rotor 1 is the right
         '''
-        assert isinstance(rotor, Rotor)
-        assert lettter in string.ascii_uppercase, 'must be an uppercase letter'
+        assert letter in string.ascii_uppercase, 'must be an uppercase letter'
         rotor_s = string.ascii_uppercase.index(rotor.getRotorPosition())
         letter_s = string.ascii_uppercase.index(letter)
         shift = letter_s - rotor_s 
@@ -201,9 +200,12 @@ class Enigma(object):
         return shift
     
     def positionToLetter(self, rotor, position):
-        assert isinstance(rotor, Rotor)
         assert position <= (len(string.ascii_uppercase) - 1)
         rotor_i = string.ascii_uppercase.index(rotor.getRotorPosition())
+        shift = rotor_i + position
+        if shift > (len(string.ascii_uppercase) - 1):
+            shift = shift % len(string.ascii_uppercase)
+        return string.ascii_uppercase[shift] 
         
 
     def keyboardInput(self, key):
@@ -211,18 +213,42 @@ class Enigma(object):
         Enter a plaintext character and return an ciphertext character
         '''
         self.stepRotors() # step the rotor before input
-        # little board mapping transposition between rotors
-        s = self.static.produceLetterOutput(key)
-        s_i = self.letterToPosition(self.static, s)
 
-        r = self.rotorR.produceLetterOutput(r_i)
-        m = self.rotorM.produceLetterOutput(m_i)
-        l = self.rotorL.produceLetterOutput(l_i)
-        e = self.rotorL.produceLetterOutput(e_i)
-        l2 = self.rotorL.produceLetterOutput(e)
-        m2 = self.rotorM.produceLetterOutput(l2)
-        r2 = self.rotorR.produceLetterOutput(m2)
-        s2 = self.static.produceLetterOutput(r2)
+        # little board mapping transposition between rotors
+        # forward path
+        s = self.static.produceLetterOutput(key)
+        s_i = string.ascii_uppercase.index(s)
+        s_l = self.positionToLetter(self.rotorR, s_i)
+
+        r = self.rotorR.produceLetterOutput(s_l)
+        r_i = self.letterToPosition(self.rotorR, r)
+        r_l = self.positionToLetter(self.rotorM, r_i)
+       
+        m = self.rotorM.produceLetterOutput(r_l)
+        m_i = self.letterToPosition(self.rotorM, m)
+        m_l = self.positionToLetter(self.rotorL, r_i)
+
+        l = self.rotorL.produceLetterOutput(m_l)
+        l_i = self.letterToPosition(self.rotorL, l)
+        l_l = string.ascii_uppercase[l_i]
+
+        # reflector
+        e = self.reflector.produceLetterOutput(l_l)
+
+        # reverse path
+        l2 = self.rotorL.produceReverseOutput(e)
+        l2_i = self.letterToPosition(self.rotorL, l2)
+        l2_l = self.positionToLetter(self.rotorM, l2_i)
+
+        m2 = self.rotorM.produceReverseOutput(l2_l)
+        m2_i = self.letterToPosition(self.rotorM, m2)
+        m2_l = self.positionToLetter(self.rotorR, m2_i)
+        
+        r2 = self.rotorR.produceReverseOutput(m2_l)
+        r2_i = self.letterToPosition(self.rotorR, r2)
+        r2_l = string.ascii_uppercase[r2_i]
+        
+        s2 = self.static.produceLetterOutput(r2_l)
         return s2
         
        
