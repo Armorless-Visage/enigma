@@ -2,7 +2,6 @@
 
 import string
 
-
 class SubstitutionComponent(object):
     '''
     A wiring component that substitutes one letter for another
@@ -28,16 +27,17 @@ class SubstitutionComponent(object):
         return self.wiring.copy()
 
 class Rotor(SubstitutionComponent):
-    I = {'A':'E', 'B':'K', 'C':'M', 'D':'F', 'E':'L', 'F':'G', 'G':'D', 'H':'Q', 'I':'V', 'J':'Z', 'K':'N', 'L':'T', 'M':'O', 'N':'W', 'O':'Y', 'P':'H', 'Q':'X', 'R':'U', 'S':'S', 'T':'P', 'U':'A', 'V':'I', 'W':'B', 'X':'R', 'Y':'C', 'Z':'J'}
-    II = {'A':'A', 'B':'J', 'C':'D', 'D':'K', 'E':'S', 'F':'I', 'G':'R', 'H':'U', 'I':'X', 'J':'B', 'K':'L', 'L':'H', 'M':'W', 'N':'T', 'O':'M', 'P':'C', 'Q':'Q', 'R':'G', 'S':'Z', 'T':'N', 'U':'P', 'V':'Y', 'W':'F', 'X':'V', 'Y':'O', 'Z':'E'}
-    III = {'A':'B', 'B':'D', 'C':'F', 'D':'H', 'E':'J', 'F':'L', 'G':'C', 'H':'P', 'I':'R', 'J':'T', 'K':'X', 'L':'V', 'M':'Z', 'N':'N', 'O':'Y', 'P':'E', 'Q':'I', 'R':'W', 'S':'G', 'T':'A', 'U':'K', 'V':'M', 'W':'U', 'X':'S', 'Y':'Q', 'Z':'O'}
-#    IV = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':'', 'G':'', 'H':'', 'I':'', 'J':'', 'K':'', 'L':'', 'M':'', 'N':'', 'O':'', 'P':'', 'Q':'', 'R':'', 'S':'', 'T':'', 'U':'', 'V':'', 'W':'', 'X':'', 'Y':'', 'Z':''}
-    #V = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':'', 'G':'', 'H':'', 'I':'', 'J':'', 'K':'', 'L':'', 'M':'', 'N':'', 'O':'', 'P':'', 'Q':'', 'R':'', 'S':'', 'T':'', 'U':'', 'V':'', 'W':'', 'X':'', 'Y':'', 'Z':''}
-    #VI = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':'', 'G':'', 'H':'', 'I':'', 'J':'', 'K':'', 'L':'', 'M':'', 'N':'', 'O':'', 'P':'', 'Q':'', 'R':'', 'S':'', 'T':'', 'U':'', 'V':'', 'W':'', 'X':'', 'Y':'', 'Z':''}
-    #VII = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':'', 'G':'', 'H':'', 'I':'', 'J':'', 'K':'', 'L':'', 'M':'', 'N':'', 'O':'', 'P':'', 'Q':'', 'R':'', 'S':'', 'T':'', 'U':'', 'V':'', 'W':'', 'X':'', 'Y':'', 'Z':''}
-    #VIII = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':'', 'G':'', 'H':'', 'I':'', 'J':'', 'K':'', 'L':'', 'M':'', 'N':'', 'O':'', 'P':'', 'Q':'', 'R':'', 'S':'', 'T':'', 'U':'', 'V':'', 'W':'', 'X':'', 'Y':'', 'Z':''}
-    ROTOR_TYPE = {1:I, 2:II, 3:III}
-    ROTOR_NOTCH = {1:'Q', 2:'E', 3:'V'}
+    I = {'A': 'E', 'B': 'K', 'C': 'M', 'D': 'F', 'E': 'L', 'F': 'G', 'G': 'D', 'H': 'Q', 'I': 'V', 'J': 'Z', 'K': 'N', 'L': 'T', 'M': 'O', 'N': 'W', 'O': 'Y', 'P': 'H', 'Q': 'X', 'R': 'U', 'S': 'S', 'T': 'P', 'U': 'A', 'V': 'I', 'W': 'B', 'X': 'R', 'Y': 'C', 'Z': 'J'}
+    II = {'A': 'A', 'B': 'J', 'C': 'D', 'D': 'K', 'E': 'S', 'F': 'I', 'G': 'R', 'H': 'U', 'I': 'X', 'J': 'B', 'K': 'L', 'L': 'H', 'M': 'W', 'N': 'T', 'O': 'M', 'P': 'C', 'Q': 'Q', 'R': 'G', 'S': 'Z', 'T': 'N', 'U': 'P', 'V': 'Y', 'W': 'F', 'X': 'V', 'Y': 'O', 'Z': 'E'}
+    III = {'A': 'B', 'B': 'D', 'C': 'F', 'D': 'H', 'E': 'J', 'F': 'L', 'G': 'C', 'H': 'P', 'I': 'R', 'J': 'T', 'K': 'X', 'L': 'V', 'M': 'Z', 'N': 'N', 'O': 'Y', 'P': 'E', 'Q': 'I', 'R': 'W', 'S': 'G', 'T': 'A', 'U': 'K', 'V': 'M', 'W': 'U', 'X': 'S', 'Y': 'Q', 'Z': 'O'}
+    IV = {'A': 'E', 'B': 'S', 'C': 'O', 'D': 'V', 'E': 'P', 'F': 'Z', 'G': 'J', 'H': 'A', 'I': 'Y', 'J': 'Q', 'K': 'U', 'L': 'I', 'M': 'R', 'N': 'H', 'O': 'X', 'P': 'L', 'Q': 'N', 'R': 'F', 'S': 'T', 'T': 'G', 'U': 'K', 'V': 'D', 'W': 'C', 'X': 'M', 'Y': 'W', 'Z': 'B'}
+    V = {'A': 'V', 'B': 'Z', 'C': 'B', 'D': 'R', 'E': 'G', 'F': 'I', 'G': 'T', 'H': 'Y', 'I': 'U', 'J': 'P', 'K': 'S', 'L': 'D', 'M': 'N', 'N': 'H', 'O': 'L', 'P': 'X', 'Q': 'A', 'R': 'W', 'S': 'M', 'T': 'J', 'U': 'Q', 'V': 'O', 'W': 'F', 'X': 'E', 'Y': 'C', 'Z': 'K'}
+    VI = {'A': 'J', 'B': 'P', 'C': 'G', 'D': 'V', 'E': 'O', 'F': 'U', 'G': 'M', 'H': 'F', 'I': 'Y', 'J': 'Q', 'K': 'B', 'L': 'E', 'M': 'N', 'N': 'H', 'O': 'Z', 'P': 'R', 'Q': 'D', 'R': 'K', 'S': 'A', 'T': 'S', 'U': 'X', 'V': 'L', 'W': 'I', 'X': 'C', 'Y': 'T', 'Z': 'W'}
+    VII = {'A': 'N', 'B': 'Z', 'C': 'J', 'D': 'H', 'E': 'G', 'F': 'R', 'G': 'C', 'H': 'X', 'I': 'M', 'J': 'Y', 'K': 'S', 'L': 'W', 'M': 'B', 'N': 'O', 'O': 'U', 'P': 'F', 'Q': 'A', 'R': 'I', 'S': 'V', 'T': 'L', 'U': 'P', 'V': 'E', 'W': 'K', 'X': 'Q', 'Y': 'D', 'Z': 'T'}
+    VIII = {'A': 'F', 'B': 'K', 'C': 'Q', 'D': 'H', 'E': 'T', 'F': 'L', 'G': 'X', 'H': 'O', 'I': 'C', 'J': 'B', 'K': 'J', 'L': 'S', 'M': 'P', 'N': 'D', 'O': 'Z', 'P': 'R', 'Q': 'A', 'R': 'M', 'S': 'E', 'T': 'W', 'U': 'N', 'V': 'I', 'W': 'U', 'X': 'Y', 'Y': 'G', 'Z': 'V'}
+
+    ROTOR_TYPE = {1:I, 2:II, 3:III, 4:IV, 5:V, 6:VI, 7:VII, 8:VIII}
+    ROTOR_NOTCH = {1:'Q', 2:'E', 3:'V', 4:'J', 5:'Z', 6:'ZM', 7:'ZM', 8:'ZM'}
 
     def __init__(self, number, ringSetting, position):
         '''
@@ -60,7 +60,15 @@ class Rotor(SubstitutionComponent):
         self.position = position.upper()
 
     def __str__(self):
-        return str(self.position) + str(self.rotorNumber)
+        f = 'Rotor Number: ' + str(self.getRotorNumber()) + ' Rotor Position: ' + str(self.getRotorPosition())
+        return f
+
+    def getRotorNumber(self):
+        '''
+        Get the rotor number 1-8
+        '''
+        return self.rotorNumber
+
 
     def setRotorPosition(self, position):
         '''
@@ -127,16 +135,16 @@ class Rotor(SubstitutionComponent):
 
         return reverseWiring[shiftedInput]
         
-class Reflector(SubstitutionComponent):
-    REFLECTOR_A = {'A':'Y', 'B':'R', 'C':'U', 'D':'H', 'E':'Q', 'F':'S', 'G':'L', 'H':'D', 'I':'P', 'J':'X', 'K':'N', 'L':'G', 'M':'O', 'N':'K', 'O':'M', 'P':'I', 'Q':'E', 'R':'B', 'S':'F', 'T':'Z', 'U':'C', 'V':'W', 'W':'V', 'X':'J', 'Y':'A', 'Z':'T'}
-    REFLECTOR_B = {'A':'F', 'B':'V', 'C':'P', 'D':'J', 'E':'I', 'F':'A', 'G':'O', 'H':'Y', 'I':'E', 'J':'D', 'K':'R', 'L':'Z', 'M':'X', 'N':'W', 'O':'G', 'P':'C', 'Q':'T', 'R':'K', 'S':'U', 'T':'Q', 'U':'S', 'V':'B', 'W':'N', 'X':'M', 'Y':'H', 'Z':'L'}
-    REFLECTOR_TYPE = {'REFLECTOR_A':REFLECTOR_A, 'REFLECTOR_B':REFLECTOR_B}
+class Reflector(Rotor):
+    REFLECTOR_B = {'A':'Y', 'B':'R', 'C':'U', 'D':'H', 'E':'Q', 'F':'S', 'G':'L', 'H':'D', 'I':'P', 'J':'X', 'K':'N', 'L':'G', 'M':'O', 'N':'K', 'O':'M', 'P':'I', 'Q':'E', 'R':'B', 'S':'F', 'T':'Z', 'U':'C', 'V':'W', 'W':'V', 'X':'J', 'Y':'A', 'Z':'T'}
+    REFLECTOR_C = {'A':'F', 'B':'V', 'C':'P', 'D':'J', 'E':'I', 'F':'A', 'G':'O', 'H':'Y', 'I':'E', 'J':'D', 'K':'R', 'L':'Z', 'M':'X', 'N':'W', 'O':'G', 'P':'C', 'Q':'T', 'R':'K', 'S':'U', 'T':'Q', 'U':'S', 'V':'B', 'W':'N', 'X':'M', 'Y':'H', 'Z':'L'}
+    ROTOR_TYPE = {'REFLECTOR_B':REFLECTOR_B, 'REFLECTOR_C':REFLECTOR_C}
+    ROTOR_NOTCH = {'REFLECTOR_B':None, 'REFLECTOR_C':None}
     def __init__(self, reflector):
-        assert reflector in self.REFLECTOR_TYPE.keys(), str('reflector must be one of ' + str(self.REFLECTOR_TYPE.keys()))
-        self.reflector = reflector
-        SubstitutionComponent.__init__(self, self.REFLECTOR_TYPE[self.reflector])
+        super().__init__(reflector, 'A', 'A')
     def __str__(self):
-        return self.reflector
+        f = 'Reflector: ' + str(self.getRotorNumber())
+        return f
 
 class Plugboard(SubstitutionComponent):
     STATIC_WIRING = {'A':'A', 'B':'B', 'C':'C', 'D':'D', 'E':'E', 'F':'F', 'G':'G', 'H':'H', 'I':'I', 'J':'J', 'K':'K', 'L':'L', 'M':'M', 'N':'N', 'O':'O', 'P':'P', 'Q':'Q', 'R':'R', 'S':'S', 'T':'T', 'U':'U', 'V':'V', 'W':'W', 'X':'X', 'Y':'Y', 'Z':'Z'}
@@ -158,7 +166,17 @@ class Enigma(object):
         self.rotorL = rotorL
         self.rotorM = rotorM
         self.rotorR = rotorR
-        self.static = StaticRotor() 
+        self.static = StaticRotor()
+
+    def __str__(self):
+        '''
+        return information about the Enigma Machine's state
+        '''
+        f = ('Right Rotor: ' + str(self.rotorR)
+            + '\nMiddle Rotor: ' + str(self.rotorM)
+            + '\nLeft Rotor: ' + str(self.rotorL)
+            + '\n' + str(self.reflector))
+        return f
 
     def keyPress(self, keyInput):
         self.stepRotors()
@@ -171,10 +189,10 @@ class Enigma(object):
         '''
         # set a flag on the rotors that are on the notch letter
         rotorR_notch = False
-        if self.rotorR.position == self.rotorR.notch:
+        if self.rotorR.position in self.rotorR.notch:
             rotorR_notch = True
         rotorM_notch = False
-        if self.rotorM.position == self.rotorM.notch:
+        if self.rotorM.position in self.rotorM.notch:
             rotorM_notch = True
 
         self.rotorR.rotate() # always step the right rotor
@@ -226,17 +244,19 @@ class Enigma(object):
        
         m = self.rotorM.produceLetterOutput(r_l)
         m_i = self.letterToPosition(self.rotorM, m)
-        m_l = self.positionToLetter(self.rotorL, r_i)
+        m_l = self.positionToLetter(self.rotorL, m_i)
 
         l = self.rotorL.produceLetterOutput(m_l)
         l_i = self.letterToPosition(self.rotorL, l)
-        l_l = string.ascii_uppercase[l_i]
+        l_l = self.positionToLetter(self.reflector, l_i)
 
         # reflector
         e = self.reflector.produceLetterOutput(l_l)
+        e_i = self.letterToPosition(self.reflector, e)
+        e_l = self.positionToLetter(self.rotorL, e_i)
 
         # reverse path
-        l2 = self.rotorL.produceReverseOutput(e)
+        l2 = self.rotorL.produceReverseOutput(e_l)
         l2_i = self.letterToPosition(self.rotorL, l2)
         l2_l = self.positionToLetter(self.rotorM, l2_i)
 
